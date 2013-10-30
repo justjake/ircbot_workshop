@@ -70,5 +70,51 @@ to your PATH, you are basically allowing me to replace executables like
 and make sure you inspect the directories in your PATH if something goes
 wrong.
 
-### Basic IRC tasks
+### Instant Ruby Overview
+If you already know how to program in Python, ruby is pretty easy, as
+its also a scripting language thats about easy development.
 
+Python:
+
+```python
+# function
+def add(a, b):
+    return a + b
+
+# class
+class Person(object):
+    def __init__(self, name):
+        self.name = name
+
+    def greet(self):
+        return "Hello, " + self.name
+```
+
+Ruby:
+
+```ruby
+# function (not lexically scoped, watch out)
+def add(a, b)
+    return a + b
+end
+
+# class
+class Person
+    # same as __init__ in python,
+    # define `initialize` to perform new object setup.
+    # note that explicit "self" parameter is not used
+    def initialize(name)
+        # @<varname> instead of self.<varname> to access
+        # instance variables
+        @name = name 
+    end
+    
+    def greet()
+        return "Hello, " + @name
+    end
+end
+```
+
+Ruby does a ton of crazy crazy things that I think are really cool, but
+today ain't about ruby. it's about bothering others on the internet. so
+let's get to it!
