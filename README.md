@@ -1,6 +1,6 @@
-# IRC Bot Workshop 2013
-with Jake Teton-Landis and Joseph Zemek,
-two programmers at Rescomp.
+# IRC Bot Workshop (11/19 Tue 7:00-8:30PM 2013)
+- with Jake Teton-Landis and Joseph Zemek,
+  two programmers at Rescomp.
 
 ## Overview
 
@@ -24,7 +24,7 @@ for everyone to get at least a basic IRC bot running, and enough extra
 help along the way for to get even advanced features up and running for
 the novince programmer.
 
-## Steps.
+## Workshop Plan
 
 ### Getting started with Git and Ruby
 
@@ -88,6 +88,11 @@ class Person(object):
 
     def greet(self):
         return "Hello, " + self.name
+
+# instantiation
+me = Person("jake")
+# method call
+me.greet()
 ```
 
 Ruby:
@@ -113,8 +118,60 @@ class Person
         return "Hello, " + @name
     end
 end
+
+# instantiation
+me = Person.new("Jake")
+# method calls
+me.greet()
 ```
 
-Ruby does a ton of crazy crazy things that I think are really cool, but
-today ain't about ruby. it's about bothering others on the internet. so
-let's get to it!
+Ruby does a ton of crazy crazy things that let you do some really cool
+things, as we'll see once we start derping our IRC bots. But today ain't
+about ruby. it's about bothering others on the internet. so let's get to
+it!
+
+### Level 1 Bot: we exist!
+
+Pop open ircbot.rb in your favorite text editor to get started!
+We're gonna connect our bots to IRC and see them show up in a channel.
+
+(filling in config variables and running the bot for the first time)
+
+`git checkout level1-{start,end}`
+
+### Level 2 Bot: Hello User!
+
+Now lets make our bots respond to IRC events. Specifically, we should
+greet new users as they join a channel.
+
+Methods:
+    - onJoin
+
+`git checkout level2-{start,end}`
+
+### Level 3 Bot: Responding to messages
+
+The meat and potatoes of an IRC bot. Here we learn how to use regular
+expressions to listen for certain types of messages, and respond to
+those messages.
+
+Methods:
+    - onRude, a default handler. Notifies someone if they use a rude
+      word.
+    - youreWelcome, a regex matcher that only responds if a "thank-you"
+      message is sent to the bot. Sends back "You're welcome, peaceful
+      friend"
+
+`git checkout level3-{start,end}`
+
+### Level 4 Bot: Tumblrbot
+
+Connect IRC and Tumblr, everyone's two favorite things. We're going to
+build a way to create and read tumblr posts from IRC! This includes
+creating Tumblr API keys, setting up the messege listeners, etc
+
+Methods:
+    - post
+    - read
+
+`git checkout level4-{start,end}`
