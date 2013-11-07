@@ -139,6 +139,17 @@ We're gonna connect our bots to IRC and see them show up in a channel.
 
 `git checkout level1-{start,end}`
 
+#### How IRC works
+
+Today we'll be working with an IRC bot framework called Cinch.
+Cinch does all the busy work of IRC for us. it:
+  1. sets up a network connection to the IRC server
+  2. logs in our bot and adds it to a list of channels
+  3. runs loop where it sends commands to the IRC server,
+     and dispatches events from the IRC server to our bot code
+
+
+
 ### Level 2 Bot: Hello User!
 
 Now lets make our bots respond to IRC events. Specifically, we should
