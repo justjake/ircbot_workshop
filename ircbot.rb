@@ -17,20 +17,22 @@ BOT_NICK =    ENV['USER'] + '-helloworld'
 BOT_CHANNELS = ['#ircbots']
 
 
-
 # this class holds all our bot's actions.
 class BotActions
   include Cinch::Plugin
 
-  # to make the bot listen to user events, we use the 
-  # listen_to(event_type, method_name) class event
-  #
-  # the README lists common events that you'd might want to handle
-  #
-  # see http://rubydoc.info/gems/cinch/file/docs/events.md
-  # for details on how events are handled
-  # see http://en.wikipedia.org/wiki/List_of_Internet_Relay_Chat_commands
-  # for an exaustive list of events
+  # LEVEL 1 TASK: make your bot greet users when they enter the 
+  # channel, and say goodbye when they leave.
+
+  # hook up events to your methods here
+  listen_to :join, method: :on_join
+
+  def on_join(message)
+    # you can see this debug message in your bot window
+    # .to_s is like str() in python
+    puts "DEBUG: someone joined " + message.to_s
+  end
+
 
 end
 
