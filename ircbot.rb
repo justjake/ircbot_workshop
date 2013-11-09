@@ -26,13 +26,23 @@ class BotActions
 
   # hook up events to your methods here
   listen_to :join, method: :on_join
+  listen_to :leaving, method: :on_leave
 
   def on_join(message)
-    # you can see this debug message in your bot window
-    # .to_s is like str() in python
-    puts "DEBUG: someone joined " + message.to_s
+    nick = message.user.nick
+
+    # the if here prevents the bot from greeting itself
+    if nick != self.bot.nick
+      # the #{ (expression) } form is ruby string interpolation.
+      # the string below is roughly equivalent to
+      # "Hello, " + nick + ". Welcome to the channel!"
+      message.reply("Hello, #{nick}. Welcome to the channel!")
+    end
   end
 
+  def on_leave(message, user)
+    message.reply("So sad to see you leave, #{user.nick}")
+  end
 
 end
 
