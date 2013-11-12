@@ -21,8 +21,8 @@ This workshop features the use of the following technologies:
 
 Minimal programming experience. Hopefully I'll provide enough framework
 for everyone to get at least a basic IRC bot running, and enough extra
-help along the way for to get even advanced features up and running for
-the novince programmer.
+help along the way to get even advanced features up and running for
+the novice programmer.
 
 ## Workshop Plan
 
@@ -56,7 +56,7 @@ $ source ./environment.sh
 ```
 You can now access `ruby`, the ruby evaluator, as well as `irb`, the
 interactive Ruby interpreter, right in your console like you would
-Python or any other scripting languate.
+Python or any other scripting language.
 
 ### Aside: Ruby on IRC.housing and PATH security
 Ruby is not installed on irc.housing.berkeley.edu by default. I have
