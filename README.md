@@ -290,7 +290,7 @@ way to practice your regex skillz.
     see if the message contains any of them. See [String#include][include]
     and [Array#each][each]
 
-  - `on_reply`:, a regex-matched method that only responds if a "thank-you"
+  - `on_reply`: a regex-matched method that only responds if a "thank-you"
     message is sent to the bot. Sends back "You're welcome, peaceful
     friend" or some similarly polite reply.
 
