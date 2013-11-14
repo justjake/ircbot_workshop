@@ -13,7 +13,8 @@ require 'cinch'
 
 # some global constants - plz don't remove the ENV['USER'] part
 # during this workshop. It's good to know who is who.
-BOT_NICK =    ENV['USER'] + '-rudewatcher'
+BOT_TYPE = 'rudewatcher'
+BOT_NICK =    ENV['USER'] + '-' + BOT_TYPE
 BOT_CHANNELS = ['#ircbots']
 
 # bot responds to '<Bot Name>: ', in channels, or commands at the start of the line, in PMs
@@ -46,6 +47,11 @@ class BotActions
   match /YOUR REGEX HERE/, use_prefix: true, method: :on_reply
 
   def on_message(message)
+    # ignore bots of same type
+    if message.user.nick.include? BOT_TYPE
+      return
+    end
+
     # check for rude words
     # then respond
   end
