@@ -283,24 +283,26 @@ way to practice your regex skillz.
   - `:message`
 
 **Methods**:
-    - `on_message`: check all messages for rude words, and use
-      message.reply to inform people if they've made a rude mistake!
-      
-      *Hint:* make an array full of all the rude words you know, and then
-      see if the message contains any of them. See [String#include][include]
-      and [Array#each][each]
+  - `on_message`: check all messages for rude words, and use
+    message.reply to inform people if they've made a rude mistake!
+    
+    *Hint:* make an array full of all the rude words you know, and then
+    see if the message contains any of them. See [String#include][include]
+    and [Array#each][each]
 
-    - `on_reply`:, a regex-matched method that only responds if a "thank-you"
-      message is sent to the bot. Sends back "You're welcome, peaceful
-      friend" or some similarly polite reply.
+  - `on_reply`:, a regex-matched method that only responds if a "thank-you"
+    message is sent to the bot. Sends back "You're welcome, peaceful
+    friend" or some similarly polite reply.
 
-      *Hint:* use the regex OR operator `|` with a list of thank-you words
-      or sentences
+    *Hint:* use the regex OR operator `|` with a list of thank-you words
+    or sentences
 
-NOTE: If people wanna start getting crazy with their own hearts' desires
+[include]: http://ruby-doc.org/core-2.0.0/String.html#method-i-include-3F
+[each]: http://ruby-doc.org/core-2.0.0/Array.html#method-i-each
+
+*NOTE: If people wanna start getting crazy with their own hearts' desires
 here, then we don't need to move on to Level 3. We can just spend the
-rest of the workshop helping people work on their ideas.
-
+rest of the workshop helping people work on their ideas.*
 
 ### Level 3 Bot: Tumblrbot
 
@@ -309,7 +311,7 @@ build a way to create and read tumblr posts from IRC! This includes
 creating Tumblr API keys, setting up the messege listeners, etc
 
 Methods:
-    - post
-    - read
+  - post
+  - read
 
 `git checkout level4-{start,end}`
