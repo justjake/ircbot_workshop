@@ -13,35 +13,46 @@ require 'cinch'
 
 # some global constants - plz don't remove the ENV['USER'] part
 # during this workshop. It's good to know who is who.
-BOT_NICK =    ENV['USER'] + '-helloworld'
+BOT_NICK =    ENV['USER'] + '-rudewatcher'
 BOT_CHANNELS = ['#ircbots']
+
+# bot responds to '<Bot Name>: ', in channels, or commands at the start of the line, in PMs
+# IRC bot commands must be prefixed by whatever Regex this returns
+BOT_PREFIX = lambda do |m|
+  if m.channel?
+    /^#{Regexp.escape(m.bot.nick+":")}.*/
+  else
+    //
+  end
+end
+
 
 
 # this class holds all our bot's actions.
 class BotActions
   include Cinch::Plugin
 
-  # LEVEL 1 TASK: make your bot greet users when they enter the 
-  # channel, and say goodbye when they leave.
+  # LEVEL 2 TASK: respond to messages
+  # - let people know when they are rude
+  # - handle people saying "thank you" or otherwise responding
+  #   to your bot after you let them know they were rude ;)
 
-  # hook up events to your methods here
-  listen_to :join, method: :on_join
-  listen_to :leaving, method: :on_leave
+  # listen to all messages
+  listen_to :message, method: :on_message
 
-  def on_join(message)
-    nick = message.user.nick
+  # use_prefix: true indicates that we only match messages sent to our bot
+  # which is to say prefixed with our bot's name:
+  # 12:04 <@jitl>: josephz-rudewatcher: thank you for telling me I was rude.
+  match /YOUR REGEX HERE/, use_prefix: true, method: :on_reply
 
-    # the if here prevents the bot from greeting itself
-    if nick != self.bot.nick
-      # the #{ (expression) } form is ruby string interpolation.
-      # the string below is roughly equivalent to
-      # "Hello, " + nick + ". Welcome to the channel!"
-      message.reply("Hello, #{nick}. Welcome to the channel!")
-    end
+  def on_message(message)
+    # check for rude words
+    # then respond
   end
 
-  def on_leave(message, user)
-    message.reply("So sad to see you leave, #{user.nick}")
+  def on_reply(message)
+    # someone said "thanks" or related
+    puts "Message matched reply regexp: #{message.to_s}"
   end
 
 end
@@ -61,6 +72,7 @@ bot = Cinch::Bot.new do
     c.server = 'localhost'
     c.channels = BOT_CHANNELS
     c.verbose = true
+    c.plugins.prefix = BOT_PREFIX
     c.plugins.plugins = [BotActions]
   end
 end

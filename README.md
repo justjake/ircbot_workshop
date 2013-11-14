@@ -224,21 +224,83 @@ bot, you can see my work at `git chechout level1-finished`.
 ```shell
 git checkout level2
 ```
+The IRC event that you are most interested in handling is the `:message`
+event. `:message` is triggered whenever anyone writes something in an
+IRC channel that your bot can see, or sends any private message to your
+bot. You can handle the `:message` event in the same manner as you
+handled `:join` and `:leaving` in Level 1.
 
-The meat and potatoes of an IRC bot. Here we learn how to use regular
-expressions to listen for certain types of messages, and respond to
-those messages.
+You probibally don't want to reply to each and every message ever sent,
+so your `:message` handler should have some logic to determine if the
+event is of interest to your IRC bot. In general a `:message` event
+handler typically performs these steps:
+  1. classify the message as interesting or ignore it.
+  2. extract parameters our words of interest.
+  3. perform some action.
+  4. respond to the user.
 
-Methods:
-    - onRude, a default handler. Notifies someone if they use a rude
-      word.
-    - youreWelcome, a regex matcher that only responds if a "thank-you"
+The first method we'll be writing for this excersize, `detect_rude()` will be in this
+format.
+
+But what if we know that we only want to respond to messages
+with a very specific form, or containing only a few words in a know
+order? Do we have to put an `if` branch in our `:message` event handler
+for each different sort of message we want to handle? No. We can use a
+[regular expression][regex] to match and dispatch messages.
+
+In case you don't know, regular expressions is a special language to
+describe patterns of characters in a text string. A string is said to
+"match" a regular expression if the string contains the pattern that the
+regular expression describes. Regular expressions are very useful for
+programming and text search tasks, and you can use them with normal UNIX
+files without writing any code using the `grep` command.
+
+Here's all the regular expression syntax you need to complete the
+fearsom task of responding to thank-you messages:
+
+```ruby
+# alphanumeric characters have no special meaning in Ruby regular
+# expressions. to search for "happy", we just create a regular
+# expression containing those characters
+happy_regex = /happy/
+
+# "|" means "or" in a regular expression. This allows us to specify two
+# or more options for matching. Here is an example if I wanted to match
+# both spellings of "grey"
+grey_or_gray = /grey|gray|greey/
+
+# parenthesis can be used to scope operators
+grey_or_gray = /gr(a|e)y/
+```
+
+As an aside, these [regular expression crosswords][crosswords] are a great
+way to practice your regex skillz.
+
+[regex]: http://www.regular-expressions.info/quickstart.html
+[crosswords]: http://regexcrossword.com/
+
+**Events**:
+  - `:message`
+
+**Methods**:
+    - `on_message`: check all messages for rude words, and use
+      message.reply to inform people if they've made a rude mistake!
+      
+      *Hint:* make an array full of all the rude words you know, and then
+      see if the message contains any of them. See [String#include][include]
+      and [Array#each][each]
+
+    - `on_reply`:, a regex-matched method that only responds if a "thank-you"
       message is sent to the bot. Sends back "You're welcome, peaceful
-      friend"
+      friend" or some similarly polite reply.
+
+      *Hint:* use the regex OR operator `|` with a list of thank-you words
+      or sentences
 
 NOTE: If people wanna start getting crazy with their own hearts' desires
 here, then we don't need to move on to Level 3. We can just spend the
 rest of the workshop helping people work on their ideas.
+
 
 ### Level 3 Bot: Tumblrbot
 
