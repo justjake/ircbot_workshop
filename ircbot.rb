@@ -41,8 +41,8 @@ client = Tumblr::Client.new({
 # make sure the client works
 puts "Testing tumblr connection..."
 client_info = client.info
-if client_info["status"] != 200
-  puts "Tumblr connection failed: #{client_info["msg"]}"
+if client_info["user"].nil?
+  puts "Tumblr connection failed: #{client_info}"
   exit 1
 end
 
