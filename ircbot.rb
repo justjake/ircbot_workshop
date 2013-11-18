@@ -1,27 +1,25 @@
 #!/usr/bin/env /home/jitl/prefixes/rhel-headless/rbenv/shims/ruby
-
 # setup required for rubygems/bundler to work
 require 'rubygems'
 require 'bundler/setup'
-
-# interactive ruby console, useful for debugging.
-# invoke anywhere by calling `binding.pry`
 require 'pry'
-
-# the IRC bot library
 require 'cinch'
+# tumblr support
+require 'tumblr_client'
 
 # some global constants - plz don't remove the ENV['USER'] part
 # during this workshop. It's good to know who is who.
-BOT_TYPE = 'rudewatcher'
+BOT_TYPE = 'tumblr'
 BOT_NICK =    ENV['USER'] + '-' + BOT_TYPE
 BOT_CHANNELS = ['#ircbots']
 
+
+# Changed from Level 2.
 # bot responds to '<Bot Name>: ', in channels, or commands at the start of the line, in PMs
 # IRC bot commands must be prefixed by whatever Regex this returns
 BOT_PREFIX = lambda do |m|
   if m.channel?
-    /^#{Regexp.escape(m.bot.nick+":")}.*/
+    /^#{Regexp.escape(m.bot.nick+":")} /
   else
     //
   end
@@ -29,67 +27,56 @@ end
 
 
 
+### Level 3: Tumblrbot
+# tumblr configuration
+# consumer_key and comsumer_secret:   http://www.tumblr.com/oauth/apps
+# oauth_token and oauth_token_secret: https://api.tumblr.com/console//calls/user/info
+client = Tumblr::Client.new({
+  :consumer_key =>        'REPLACE_ME',
+  :consumer_secret =>     'REPLACE_ME',
+  :oauth_token =>         'REPLACE_ME',
+  :oauth_token_secret =>  'REPLACE_ME'
+})
+
+# make sure the client works
+puts "Testing tumblr connection..."
+client_info = client.info
+if client_info["status"] != 200
+  puts "Tumblr connection failed: #{client_info["msg"]}"
+  exit 1
+end
+
+
+
 # this class holds all our bot's actions.
 class BotActions
   include Cinch::Plugin
-
-  # LEVEL 2 TASK: respond to messages
-  # - let people know when they are rude
-  # - handle people saying "thank you" or otherwise responding
-  #   to your bot after you let them know they were rude ;)
-
-  # listen to all messages
-  listen_to :message, method: :on_message
-
-  # use_prefix: true indicates that we only match messages sent to our bot
-  # which is to say prefixed with our bot's name:
-  # 12:04 <@jitl>: josephz-rudewatcher: thank you for telling me I was rude.
-  match /thank|shut up|wow|stop|annoy|job/, use_prefix: true, method: :on_reply
-
-  EXCLAMATIONS = [
-    'wow',
-    'jeezy peets',
-    'holy cow',
-    'nhyomygawd',
-    '(!)'
-  ]
-
-  RUDE_WORDS = [
-    'poop',
-    'butt',
-    'moist',
-    'fart',
-    'miscreant',
-    'ruffian',
-    'harlot',
-    'your mom',
-  ]
-
-  def on_message(message)
-    # ignore bots of same type
-    if message.user.nick.include? BOT_TYPE
-      return
-    end
-
-    # accumulate the rude words we see in the message
-    rude_words_used = []
-    RUDE_WORDS.each do |word|
-      if message.message.downcase.include? word
-        rude_words_used.push(word)
-      end
-    end
-
-    # send reply if any rude words were used
-    if rude_words_used.length == 1
-      message.reply("#{EXCLAMATIONS.sample} #{message.user}, you just used a pretty rude word")
-    elsif rude_words_used.length > 1
-      message.reply("#{EXCLAMATIONS.sample} #{message.user}, you just used #{rude_words_used.length} rude words.")
-    end
+  def initialize(bot)
+    # only show new tumblr posts since the `@last_fetch_timestamp`
+    @last_fetch_timestamp = Time.new
+    super(bot)
   end
 
-  def on_reply(message)
-    puts "Message matched reply regexp: #{message.to_s}"
-    message.reply("you're welcome ^_^")
+
+
+  ### Level 3: Tumblrbot
+  match /REPLACE_ME/, method: :get_updates
+  # you need to match two groups: one for post_name, one for post_body
+  match /REPLACE_ME/, method: :create_post
+
+  # display new posts from your tumblr from iRC
+  def get_updates(message)
+    puts "get_updates since #{@last_fetch_timestamp}"
+    @last_fetch_timestamp = Time.new
+
+    # YOUR CODE HERE
+  end
+
+  # publish a new post on your Tumblog
+  def create_post(message, post_name, post_body)
+    puts "create_post name: '#{post_name}' body: '#{post_body}'"
+
+    # YOUR CODE HERE
   end
 
 end

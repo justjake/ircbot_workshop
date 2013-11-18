@@ -6,3 +6,6 @@ gem "cinch", "~> 2.0"
 # interactive debugger/code explorer:w
 gem "rb-readline"
 gem "pry"
+
+# Tumblr
+gem "tumblr_client"
