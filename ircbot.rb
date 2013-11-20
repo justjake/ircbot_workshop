@@ -4,15 +4,14 @@ require 'rubygems'
 require 'bundler/setup'
 require 'pry'
 require 'cinch'
-# tumblr support
-require 'tumblr_client'
+# tumblr support -- with a few extra goodies from Jake
+require_relative "tumblr_enhanced"
 
 # some global constants - plz don't remove the ENV['USER'] part
 # during this workshop. It's good to know who is who.
 BOT_TYPE = 'tumblr'
 BOT_NICK =    ENV['USER'] + '-' + BOT_TYPE
 BOT_CHANNELS = ['#ircbots']
-
 
 # Changed from Level 2.
 # bot responds to '<Bot Name>: ', in channels, or commands at the start of the line, in PMs
@@ -25,24 +24,22 @@ BOT_PREFIX = lambda do |m|
   end
 end
 
-
-
 ### Level 3: Tumblrbot
 # tumblr configuration
 # consumer_key and comsumer_secret:   http://www.tumblr.com/oauth/apps
 # oauth_token and oauth_token_secret: https://api.tumblr.com/console//calls/user/info
-client = Tumblr::Client.new({
-  :consumer_key =>        'REPLACE_ME',
-  :consumer_secret =>     'REPLACE_ME',
-  :oauth_token =>         'REPLACE_ME',
-  :oauth_token_secret =>  'REPLACE_ME'
+Client = TumblrEnhanced.client({
+  :consumer_key =>       'REPLACE_ME',
+  :consumer_secret =>    'REPLACE_ME',
+  :oauth_token =>        'REPLACE_ME',
+  :oauth_token_secret => 'REPLACE_ME'
 })
 
 # make sure the client works
 puts "Testing tumblr connection..."
-client_info = client.info
-if client_info["user"].nil?
+if Client.info.user.nil?
   puts "Tumblr connection failed: #{client_info}"
+  puts "Check your OAuth parameters"
   exit 1
 end
 
@@ -52,35 +49,27 @@ end
 class BotActions
   include Cinch::Plugin
   def initialize(bot)
-    # only show new tumblr posts since the `@last_fetch_timestamp`
-    @last_fetch_timestamp = Time.new
+    @blog = Client.info.user.blogs.find {|b| b["primary"] }
+    @last_check = Time.now
     super(bot)
   end
 
 
 
   ### Level 3: Tumblrbot
-  match /REPLACE_ME/, method: :get_updates
-  # you need to match two groups: one for post_name, one for post_body
-  match /REPLACE_ME/, method: :create_post
-
-  # display new posts from your tumblr from iRC
-  def get_updates(message)
-    puts "get_updates since #{@last_fetch_timestamp}"
-    @last_fetch_timestamp = Time.new
-
+  # display new posts from your tumblr from IRC
+  timer 60, method: :check_new_posts
+  def check_new_posts()
+    puts "checking for posts since #{@last_check}"
+    
+    
     # YOUR CODE HERE
-  end
-
-  # publish a new post on your Tumblog
-  def create_post(message, post_name, post_body)
-    puts "create_post name: '#{post_name}' body: '#{post_body}'"
-
-    # YOUR CODE HERE
+    
+    
+    @last_check = Time.now
   end
 
 end
-
 
 
 
