@@ -133,7 +133,7 @@ it!
 ### Level 0: The Framework
 
 ```bash
-git checkout level0
+cd level0
 ```
 
 Our IRC bots are going to use a framework called [Cinch][cinch] to take
@@ -167,7 +167,7 @@ Any question on the basic architecture of our IRC bot?
 ### Level 1: Hello User!
 
 ```bash
-git checkout level1
+cd level1
 ```
 
 Let's get coding and make our bots respond to IRC events. Specifically,
@@ -221,8 +221,8 @@ bot, you can see my work at `git chechout level1-finished`.
 
 ### Level 2: Responding to Messages
 
-```shell
-git checkout level2
+```bash
+cd level2
 ```
 The IRC event that you are most interested in handling is the `:message`
 event. `:message` is triggered whenever anyone writes something in an
@@ -306,12 +306,67 @@ rest of the workshop helping people work on their ideas.*
 
 ### Level 3 Bot: Tumblrbot
 
+```bash
+cd level3
+```
+
 Connect IRC and Tumblr, everyone's two favorite things. We're going to
 build a way to create and read tumblr posts from IRC! This includes
 creating Tumblr API keys, setting up the messege listeners, etc
+This section might be a little bit advanced. 
 
-Methods:
-  - post
-  - read
+#### Tumblr API Authorization 
 
-`git checkout level4-{start,end}`
+We're going to hook our IRC
+bot up to Tumblr to read from (and even post to) Tumblr. We'll need a
+set of four special values from https://developer.tumblr.com to give
+our bots permission to use our Tumblr accounts. 
+
+1. Register a new Tumblr API app at http://www.tumblr.com/oauth/apps to
+   get access to the Tumblr API
+
+2. Go to https://api.tumblr.com/console//calls/user/info and select
+   "Ruby" for your programming language to get a nice, copy-pasteable
+   code snippet that looks like the one in `ircbot.rb`
+
+3. Copy the four indented lines starting with `:some_words` into your
+   ircbot.rb
+
+#### Recurring Events
+
+There's one type of task that we don't know how to manage yet:
+scheduled, recurring events. As usual, Cinch has our back with an easy
+[`timer` method][timer] that will run one of our methods after a
+recurring time interval.
+
+We're going to use a recurring event timer to periodically check for new
+posts to our tumblr. Here's the code snippet from `ircbot.rb`:
+
+```ruby
+timer 15, method: :check_new_posts
+
+def check_new_posts()
+    # TODO: check tumblr for new blog posts
+    # and tell our channels about them.
+
+    @last_check = Time.now
+end
+```
+
+[timer]: http://rubydoc.info/gems/cinch/Cinch/Plugin/ClassMethods#timer-instance_method 
+
+#### Suggestions
+
+We're using the Tumblr Rubygem, which you can find online here:
+https://github.com/tumblr/tumblr_client
+
+You can see the sort of responeses you'd get from the Tumblr API using
+thier API console were you got the authorization, at
+https://api.tumblr.com/console//calls/blog/posts
+
+You can make these Ruby calls in a Ruby command line by running
+`./tumblr_command_line.rb` and typing in Ruby statetments directly.
+
+You'll want to compare each post's `date` field to the `@last_check`
+Time object, and then notify the channel about any posts newer than
+`@last_check`.

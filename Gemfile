@@ -9,3 +9,4 @@ gem "pry"
 
 # Tumblr
 gem "tumblr_client"
+gem "reverse_markdown"
