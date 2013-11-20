@@ -1,6 +1,7 @@
 # IRC Bot Workshop (11/19 Tue 7:00-8:30PM 2013)
 - with Jake Teton-Landis and Joseph Zemek,
   two programmers at Rescomp.
+- slides: [google drive]( https://docs.google.com/presentation/d/1antbyCNNqkmkfS5TNGPv482lbBhQRHsCLr3gCjBZnjI/edit?usp=sharing)
 
 ## Overview
 
